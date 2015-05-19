@@ -23,7 +23,7 @@ public class ExecuteBean {
 
     public void execute() {
         String result = statelessExecuteBean.executeCommand(command);
-        System.out.println(result);
+        System.out.println("> " + command + "\n" + result);
     }
 
 //--------------------------- Getters/Setters ---------------------------
