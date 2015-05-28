@@ -7,14 +7,18 @@ package com.lisp.services;
 
 import javax.ejb.Local;
 import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.Package;
 
 /**
  *
  * @author Liferay
  */
 @Local
-public interface SingletonInterpreterBeanLocal {
+public interface SingletonStartupBeanLocal {
 
-    Interpreter createInstance();
+    Interpreter getInstance();
+
+    Package getCommonLispPackage();
     
+    String executeCommand(String user, String command);
 }

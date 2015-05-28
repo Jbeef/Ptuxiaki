@@ -14,13 +14,13 @@ import org.armedbear.lisp.LispObject;
 public class StatelessExecuteBean implements StatelessExecuteBeanLocal {
 
     @EJB
-    private SingletonInterpreterBeanLocal singletonInterpreterBean;
+    private SingletonStartupBeanLocal singletonStartupBean;
 
     private Interpreter interpreter;
 
     @PostConstruct
     public void init() {
-        interpreter = singletonInterpreterBean.createInstance();
+        interpreter = singletonStartupBean.getInstance();
     }
 
     @Override

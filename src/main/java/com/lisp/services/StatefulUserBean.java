@@ -6,7 +6,11 @@ import javax.ejb.EJB;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
 import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.JavaObject;
 import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.Packages;
+import org.armedbear.lisp.Package;
+import org.armedbear.lisp.Symbol;
 
 /**
  *
@@ -16,25 +20,33 @@ import org.armedbear.lisp.LispObject;
 public class StatefulUserBean implements StatefulUserBeanLocal {
 
     @EJB
-    private SingletonInterpreterBeanLocal singletonInterpreterBean;
+    private SingletonStartupBeanLocal singletonStartupBean;
 
     @Resource
     private SessionContext context;
 
-    private Interpreter interpreter;
+    private Package homePackage;
+    private Package globalPackage;
 
     @PostConstruct
     public void init() {
-        System.out.println("Stateful init - HashCode: " + context.hashCode());
-        interpreter = singletonInterpreterBean.createInstance();
-        interpreter.eval("(defpackage :" + context.hashCode() + " (:use :common-lisp))");        
+
+        globalPackage = singletonStartupBean.getCommonLispPackage();
+
+        homePackage = Packages.createPackage(String.valueOf(context.hashCode()));
+        homePackage.usePackage(globalPackage);
+
+        //interpreter.eval("(defpackage :" + context.hashCode() + " (:use :common-lisp))");
     }
 
     @Override
     public String executeCommand(String command) {
 
-        interpreter.eval("(in-package :" + context.hashCode() + ")");
-        LispObject result = interpreter.eval(command);
-        return result.princToString();
+        //JavaObject object = new JavaObject(command);
+        //LispObject result = homePackage.execute(object);
+        String result = singletonStartupBean.executeCommand(
+                String.valueOf(context.hashCode()), command);
+
+        return result;
     }
 }
