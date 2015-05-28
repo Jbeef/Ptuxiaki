@@ -12,7 +12,7 @@ import javax.ejb.Local;
  * @author Akis
  */
 @Local
-public interface SingletoninterpreterBeanLocal {
+public interface SingletonInterpreterBeanLocal {
 
     String executeCommand(String user, String command);
 }

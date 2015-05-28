@@ -10,13 +10,14 @@ import javax.ejb.Singleton;
 import org.armedbear.lisp.Interpreter;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Packages;
+import org.armedbear.lisp.Package;
 
 /**
  *
  * @author Akis
  */
 @Singleton
-public class SingletoninterpreterBean implements SingletoninterpreterBeanLocal {
+public class SingletonInterpreterBean implements SingletonInterpreterBeanLocal {
 
     @EJB
     private SingletonStartupBeanLocal singletonStartupBean;
@@ -33,7 +34,7 @@ public class SingletoninterpreterBean implements SingletoninterpreterBeanLocal {
     @AccessTimeout(unit = TimeUnit.SECONDS, value = 4)
     public String executeCommand(String user, String command) {
         String result = "";
-        org.armedbear.lisp.Package userPackage = Packages.findPackage(user);
+        Package userPackage = Packages.findPackage(user);
         if (userPackage == null) {
             return "## Error ##  Package not found !!";
         }
