@@ -1,5 +1,6 @@
 package com.lisp.services;
 
+import com.lisp.interceptors.SelectPackage;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 import javax.ejb.AccessTimeout;
@@ -7,6 +8,7 @@ import javax.ejb.EJB;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
+import javax.interceptor.ExcludeClassInterceptors;
 import org.armedbear.lisp.Interpreter;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Packages;
@@ -17,6 +19,7 @@ import org.armedbear.lisp.Package;
  * @author Akis
  */
 @Singleton
+@SelectPackage
 public class SingletonInterpreterBean implements SingletonInterpreterBeanLocal {
 
     @EJB
@@ -25,6 +28,7 @@ public class SingletonInterpreterBean implements SingletonInterpreterBeanLocal {
     private Interpreter interpreter;
 
     @PostConstruct
+    @ExcludeClassInterceptors
     private void init() {
         interpreter = singletonStartupBean.getInstance();
     }
@@ -32,15 +36,10 @@ public class SingletonInterpreterBean implements SingletonInterpreterBeanLocal {
     @Override
     @Lock(LockType.WRITE)
     @AccessTimeout(unit = TimeUnit.SECONDS, value = 4)
-    public String executeCommand(String user, String command) {
+    public String executeCommand(Package homePackage, String command) {
         String result = "";
-        Package userPackage = Packages.findPackage(user);
-        if (userPackage == null) {
-            return "## Error ##  Package not found !!";
-        }
 
         try {
-            interpreter.eval("(in-package :" + user + ")");
             LispObject object = interpreter.eval(command);
             result = object.princToString();
         } catch (Throwable t) {
@@ -49,4 +48,5 @@ public class SingletonInterpreterBean implements SingletonInterpreterBeanLocal {
         }
         return result;
     }
+
 }

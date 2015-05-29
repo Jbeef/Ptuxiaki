@@ -6,6 +6,7 @@
 package com.lisp.services;
 
 import javax.ejb.Local;
+import org.armedbear.lisp.Package;
 
 /**
  *
@@ -14,5 +15,5 @@ import javax.ejb.Local;
 @Local
 public interface SingletonInterpreterBeanLocal {
 
-    String executeCommand(String user, String command);
+    String executeCommand(Package homePackage, String command);
 }

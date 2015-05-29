@@ -27,12 +27,12 @@ public class StatefulUserBean implements StatefulUserBeanLocal {
 
     @PostConstruct
     public void init() {
-        homePackage = singletonStartupBean.defineNewPackage(String.valueOf(context.hashCode()));
+        homePackage = singletonStartupBean.createPackage(String.valueOf(context.hashCode()));
     }
 
     @Override
     public String executeCommand(String command) {
-        String result = singletonInterpreterBean.executeCommand(homePackage.getName(), command);
+        String result = singletonInterpreterBean.executeCommand(homePackage, command);
 
         return result;
     }

@@ -38,12 +38,30 @@ public class SingletonStartupBean implements SingletonStartupBeanLocal {
     }
 
     @Override
-    @Lock(LockType.READ)
-    public Package defineNewPackage(String user) {
-        Package newPackage = Packages.createPackage(user);
-        newPackage.usePackage(commonLispPackage);
-
+    @Lock(LockType.WRITE)
+    public Package createPackage(String user) {
+        Package newPackage = Packages.findPackage(user);
+        if (newPackage == null) {
+            newPackage = Packages.createPackage(user);
+            newPackage.usePackage(commonLispPackage);
+        }
         return newPackage;
+    }
+
+    @Override
+    @Lock(LockType.WRITE)
+    public void removePackage(Package pack) {
+        Package removePackage = Packages.findPackage(pack.getName());
+        if (removePackage != null) {
+            Packages.deletePackage(removePackage);
+        }
+    }
+
+    @Override
+    @Lock(LockType.READ)
+    public Package findPackage(String packageName) {
+        Package searchPackage = Packages.findPackage(packageName);
+        return searchPackage;
     }
 
 }

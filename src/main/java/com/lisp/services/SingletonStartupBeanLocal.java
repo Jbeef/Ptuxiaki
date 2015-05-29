@@ -18,5 +18,9 @@ public interface SingletonStartupBeanLocal {
 
     Interpreter getInstance();
 
-    Package defineNewPackage(String user);
+    Package createPackage(String user);
+    
+    void removePackage(Package pack);
+    
+    Package findPackage(String packageName);
 }
