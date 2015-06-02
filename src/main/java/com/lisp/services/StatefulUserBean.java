@@ -1,5 +1,6 @@
 package com.lisp.services;
 
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -35,5 +36,10 @@ public class StatefulUserBean implements StatefulUserBeanLocal {
         String result = singletonInterpreterBean.executeCommand(homePackage, command);
 
         return result;
+    }
+
+    @Override
+    public List<Package> getAllPackages() {
+        return singletonStartupBean.getAllPackages();
     }
 }
