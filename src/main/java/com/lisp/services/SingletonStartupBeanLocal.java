@@ -5,6 +5,7 @@
  */
 package com.lisp.services;
 
+import java.util.List;
 import javax.ejb.Local;
 import org.armedbear.lisp.Interpreter;
 import org.armedbear.lisp.Package;
@@ -23,4 +24,6 @@ public interface SingletonStartupBeanLocal {
     void removePackage(Package pack);
     
     Package findPackage(String packageName);
+    
+    List<Package> getAllPackages();
 }

@@ -10,9 +10,9 @@
         <h:form>
             <p:outputLabel value="Command"/>        
             <br />
-            <p:inputTextarea value="#{executeBean.command}" cols="50"/>
+            <p:inputTextarea value="#{executionBean.command}" cols="50"/>
             <br/><br/>
-            <p:commandButton value="Execute" action="#{executeBean.execute()}" 
+            <p:commandButton value="Execute" action="#{executionBean.execute()}" 
                              onstart="PF('statusDialog').show()" 
                              onsuccess="PF('statusDialog').hide()"/>            
         </h:form>

@@ -1,5 +1,7 @@
 package com.lisp.services;
 
+import java.util.Arrays;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
@@ -64,4 +66,10 @@ public class SingletonStartupBean implements SingletonStartupBeanLocal {
         return searchPackage;
     }
 
+    @Override
+    @Lock(LockType.READ)
+    public List<Package> getAllPackages() {
+        List<Package> allPackages = Arrays.asList(Packages.getAllPackages());
+        return allPackages;
+    }
 }
