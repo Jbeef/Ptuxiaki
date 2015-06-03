@@ -2,6 +2,7 @@ package com.lisp.services;
 
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.SessionContext;
@@ -29,6 +30,11 @@ public class StatefulUserBean implements StatefulUserBeanLocal {
     @PostConstruct
     public void init() {
         homePackage = singletonStartupBean.createPackage(String.valueOf(context.hashCode()));
+    }
+    
+    @PreDestroy
+    private void remove() {
+        singletonStartupBean.removePackage(homePackage);
     }
 
     @Override

@@ -25,21 +25,24 @@ public class SelectPackageInterceptor implements Serializable {
 
     @AroundInvoke
     public Object selectPackage(InvocationContext context) throws Exception {
-        Package homePackage;
+        Package homePackage = null;
         Object[] parameters = context.getParameters();
 
         for (Object param : parameters) {
             if (param instanceof Package) {
                 Package p = (Package) param;
                 homePackage = Packages.findPackage(p.getName());
-
-                if (homePackage != null) {
-                    Interpreter.evaluate("(in-package :" + homePackage.getName() + ")");
-                }
                 break;
             }
         }
-        return context.proceed();
+
+        if (homePackage != null) {
+            Interpreter.evaluate("(in-package :" + homePackage.getName() + ")");
+            return context.proceed();
+        } else {
+            throw new Exception();
+        }
+
     }
 
 }
