@@ -7,7 +7,11 @@ import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
+import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Package;
+import org.armedbear.lisp.Packages;
+import org.armedbear.lisp.Symbol;
 
 /**
  *
@@ -47,5 +51,22 @@ public class StatefulUserBean implements StatefulUserBeanLocal {
     @Override
     public List<Package> getAllPackages() {
         return singletonStartupBean.getAllPackages();
+    }
+    
+    @Override
+    public void executeFromFile() {
+        Interpreter.evaluate("(load \"C:/Users/Liferay/Desktop/file.lisp\")");
+       //"(load \"Users/Liferay/Desktop/file.lisp\")"  
+        Package defaultPackage = Packages.findPackage(homePackage.getName());
+        Symbol sym = defaultPackage.findAccessibleSymbol("LISPFUNCTION");
+        sym.getSymbolFunction().execute();
+        
+        Symbol[] symbols = defaultPackage.symbols();
+        System.out.println(symbols.length);
+        for(Symbol s : symbols){
+            System.out.println(s.getName() + "  " + s.getQualifiedName());
+        }
+        
+        
     }
 }

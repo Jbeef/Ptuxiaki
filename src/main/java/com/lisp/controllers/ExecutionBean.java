@@ -6,6 +6,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Package;
 
 /**
@@ -37,6 +39,10 @@ public class ExecutionBean implements Serializable {
             System.out.println(p.getName());
         }
         System.out.println("###  " + all.size());
+    }
+
+    public void executeFromFile(){
+        statefulUserBean.executeFromFile();
     }
 
 //--------------------------- Getters/Setters ---------------------------

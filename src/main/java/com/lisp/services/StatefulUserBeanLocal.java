@@ -14,4 +14,6 @@ public interface StatefulUserBeanLocal {
     String executeCommand(String command);
 
     List<Package> getAllPackages();
+    
+    void executeFromFile();
 }
