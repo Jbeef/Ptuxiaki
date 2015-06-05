@@ -17,8 +17,10 @@
                              onsuccess="PF('statusDialog').hide()"/>     
             <p:commandButton value="Packages" 
                              actionListener="#{executionBean.allPackages()}"/>
-            <p:commandButton value="File" ajax="false"
-                             actionListener="#{executionBean.executeFromFile()}"/>
+            <p:commandButton value="File"
+                             actionListener="#{executionBean.getSymbolsFromFile()}"
+                             onstart="PF('statusDialog').show()" 
+                             onsuccess="PF('statusDialog').hide()"/>
         </h:form>
 
         <p:dialog widgetVar="statusDialog" modal="true" draggable="false" 

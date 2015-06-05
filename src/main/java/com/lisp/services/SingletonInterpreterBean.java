@@ -70,17 +70,17 @@ public class SingletonInterpreterBean implements SingletonInterpreterBeanLocal {
         
         return null;
     }
-
+// (unintern 'function)
     @Override
-    @Lock(LockType.READ)
+    @Lock(LockType.READ)    
     public List<Symbol> getSymbolsFromFile(Package homePackage, String url) {
         List<Symbol> listOfSymbols = new ArrayList<>();
         
         interpreter.eval("(load " + "\"" + url + "\"" + ")");
-        Package defaultPackage = singletonStartupBean.findPackage(homePackage.getName());
+        //Package defaultPackage = singletonStartupBean.findPackage(homePackage.getName());
 
-        if (defaultPackage != null) {
-            listOfSymbols = Arrays.asList(defaultPackage.symbols());
+        if (homePackage != null) {
+            listOfSymbols = Arrays.asList(homePackage.symbols());
         }
         return listOfSymbols;
     }

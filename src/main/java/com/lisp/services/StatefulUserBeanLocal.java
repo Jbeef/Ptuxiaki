@@ -11,4 +11,6 @@ import org.armedbear.lisp.Package;
 public interface StatefulUserBeanLocal {
 
     Package getHomePackage();
+    
+    void logout();
 }

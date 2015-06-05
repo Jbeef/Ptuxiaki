@@ -1,10 +1,9 @@
 package com.lisp.services;
 
-import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.Remove;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
 import org.armedbear.lisp.Package;
@@ -27,6 +26,13 @@ public class StatefulUserBean implements StatefulUserBeanLocal {
     @PreDestroy
     private void remove() {
         singletonStartupBean.removePackage(homePackage);
+    }
+
+    @Override
+    @Remove
+    public void logout() {
+        remove();
+        // TODO: Invalidate HttpSession
     }
 
     @Override
