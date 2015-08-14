@@ -1,4 +1,4 @@
-package com.lisp.services;
+package com.lisp.services.ejb;
 
 import com.lisp.interceptors.SelectPackage;
 import java.util.ArrayList;

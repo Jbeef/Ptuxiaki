@@ -1,4 +1,4 @@
-package com.lisp.services;
+package com.lisp.services.ejb;
 
 import java.util.List;
 import javax.ejb.Local;

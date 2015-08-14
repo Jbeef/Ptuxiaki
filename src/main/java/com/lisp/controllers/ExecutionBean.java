@@ -1,12 +1,12 @@
 package com.lisp.controllers;
 
-import com.lisp.services.SingletonInterpreterBeanLocal;
-import com.lisp.services.SingletonStartupBeanLocal;
-import com.lisp.services.StatefulUserBeanLocal;
+import com.lisp.services.ejb.SingletonInterpreterBeanLocal;
+import com.lisp.services.ejb.SingletonStartupBeanLocal;
+import com.lisp.services.ejb.StatelessUserBeanLocal;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -22,7 +22,7 @@ import org.armedbear.lisp.Symbol;
 public class ExecutionBean implements Serializable {
 
     @EJB
-    private StatefulUserBeanLocal statefulUserBean;
+    private StatelessUserBeanLocal statelessUserBean;
     @EJB
     private SingletonStartupBeanLocal singletonStartupBean;
     @EJB
@@ -31,14 +31,19 @@ public class ExecutionBean implements Serializable {
     private static final long serialVersionUID = 2308950136069917949L;
 
     private String command;
-    private Package homePackage;    
-    
+    private Package homePackage;
+
     public ExecutionBean() {
     }
 
     @PostConstruct
-    public void init() {
-        homePackage = statefulUserBean.getHomePackage();
+    private void init() {
+        homePackage = statelessUserBean.getHomePackage();
+    }
+
+    @PreDestroy
+    private void remove() {
+        singletonStartupBean.removePackage(homePackage);
     }
 
     public void execute() {
@@ -57,24 +62,24 @@ public class ExecutionBean implements Serializable {
     public void executeFromFile() {
 
     }
-    
-    public void getSymbolsFromFile(){
+
+    public void getSymbolsFromFile() {
         String url = "C:/Users/Liferay/Desktop/file.lisp";
         List<Symbol> list = singletonInterpreterBean.getSymbolsFromFile(homePackage, url);
         System.out.println(list.size());
-        for(Symbol s : list) {
-            System.out.println(s.getName());                
+        for (Symbol s : list) {
+            System.out.println(s.getName());
             System.out.println(s.getPropertyList().length());
             System.out.println(s.getParts().length());
         }
-    }        
-    
-    public void unintern() { 
+    }
+
+    public void unintern() {
         // TODO homePackage.unintern(Symbol s);
     }
-    
+
     public String logout() {
-        statefulUserBean.logout();
+        statelessUserBean.logout();
         return ""; // TODO return to other page after logout 
     }
 
