@@ -1,5 +1,6 @@
 package com.lisp.utils;
 
+import com.google.gson.Gson;
 import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -37,6 +38,11 @@ public class UtilsProducer implements Serializable {
             Logger.getLogger(UtilsProducer.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    @Produces
+    public Gson getGson() {
+        return new Gson();
     }
 
 }

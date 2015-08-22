@@ -12,11 +12,13 @@ import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.interceptor.ExcludeClassInterceptors;
+import javax.script.ScriptEngine;
 import org.armedbear.lisp.Interpreter;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Package;
 import org.armedbear.lisp.Packages;
 import org.armedbear.lisp.Symbol;
+import org.armedbear.lisp.scripting.AbclScriptEngineFactory;
 
 /**
  *
@@ -40,14 +42,18 @@ public class SingletonInterpreterBean implements SingletonInterpreterBeanLocal {
     @Override
     @Lock(LockType.READ)
     public String executeCommand(Package homePackage, String command) {
-        String result = "";
+        String result;
+        ScriptEngine engine = new AbclScriptEngineFactory().getScriptEngine();
 
         try {
+            engine.eval(command);
             LispObject object = interpreter.eval(command);
+
             result = object.princToString();
         } catch (Throwable t) {
-            System.out.println("#######    EXCEPTION     ######");
-            System.out.println(t.getMessage());
+            System.out.println("#######    INTERPRETER EXCEPTION     ######");
+            result = t.getMessage();
+            System.out.println(result);
         }
         return result;
     }
@@ -67,15 +73,16 @@ public class SingletonInterpreterBean implements SingletonInterpreterBeanLocal {
         for (Symbol s : symbols) {
             System.out.println(s.getName() + "  " + s.getQualifiedName());
         }
-        
+
         return null;
     }
 // (unintern 'function)
+
     @Override
-    @Lock(LockType.READ)    
+    @Lock(LockType.READ)
     public List<Symbol> getSymbolsFromFile(Package homePackage, String url) {
         List<Symbol> listOfSymbols = new ArrayList<>();
-        
+
         interpreter.eval("(load " + "\"" + url + "\"" + ")");
         //Package defaultPackage = singletonStartupBean.findPackage(homePackage.getName());
 
