@@ -3,6 +3,9 @@ package com.lisp.services.rest;
 import com.google.gson.Gson;
 import com.lisp.services.ejb.SingletonInterpreterBeanLocal;
 import com.lisp.services.ejb.StatelessUserBeanLocal;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -16,6 +19,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import org.apache.commons.io.IOUtils;
 import org.armedbear.lisp.Package;
 
 /**
@@ -45,7 +50,7 @@ public class RestService {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/homePackage")
     public String getHomePackage() {
-        return gson.toJson(statelessUserBean.getHomePackage());
+        return statelessUserBean.getHomePackage().getName();
     }
 
     /*
@@ -82,6 +87,21 @@ public class RestService {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void putJson(String content) {
+    }
+
+    @POST
+    @Path("/file")
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
+    public Response executeFile(InputStream input) throws IOException {
+
+        System.out.println("## IN EXECUTE_FILE");
+
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(input, writer);
+
+        System.out.println("###  " + writer.toString());
+
+        return Response.ok().build();
     }
 
 }
